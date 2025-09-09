@@ -23,6 +23,8 @@ https://github.com/user-attachments/assets/4d25c7e3-18c1-4c92-9521-848d03ec9443
 - **Progress tracking**. Monitor enrichment progress as the tool processes data.
 - **User-friendly interface**. Clean, professional dashboard for easy data access.
 
+For even more powerful research and data enrichment, try [Deep Lookup](https://docs.brightdata.com/datasets/deep-lookup/overview). This tool searches across more than 1,000 public sources and returns ready-to-use structured data using natural language queries.
+
 ## End-to-end workflow 🔄
 1. **User input**. Upload a CSV with company names via the [Streamlit](https://streamlit.io/) interface.
 2. **Data preparation**. [Pandas](https://pandas.pydata.org/) checks for valid company names and removes duplicates.
