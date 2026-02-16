@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - APIs: Bright Data Web Scraper API, Google Gemini AI (optional)
 - No database (CSV-based with JSON progress tracking)
 
-**Repository URL**: https://github.com/triposat/ai-company-enrichment
+**Repository URL**: https://github.com/jrgensls/company-data-enrichment
 
 ---
 
@@ -63,7 +63,7 @@ python --version  # Python 3.9+ required
 ### Installation
 ```bash
 # 1. Clone the repository
-git clone https://github.com/triposat/ai-company-enrichment.git
+git clone https://github.com/jrgensls/company-data-enrichment.git
 cd ai-company-enrichment
 
 # 2. Create and activate virtual environment
