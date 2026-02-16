@@ -1,12 +1,6 @@
-<p align="center">
-  <a href="https://brightdata.com/">
-    <img src="https://mintlify.s3.us-west-1.amazonaws.com/brightdata/logo/light.svg" width="300" alt="Bright Data Logo">
-  </a>
-</p>
+# EnrichIQ - Company Data Enrichment Tool
 
-# Company Data Enrichment Tool 🏢
-
-**Instantly enrich company lists with actionable business data using [Bright Data Web Scraper API](https://brightdata.com/products/web-scraper), Google Gemini AI, and Streamlit. Perfect for lead generation, market research, or competitor analysis. Just upload your CSV—get CEO, funding, products, and more in minutes.**
+Enrich company lists with emails, websites, and phone numbers using web scraping. Upload a CSV, click enrich, and get results — powered by [Bright Data](https://brightdata.com/) APIs and [Streamlit](https://streamlit.io/).
 
 <div align="center">
   <img src="https://img.shields.io/badge/python-3.9+-blue"/>
@@ -15,85 +9,87 @@
 
 ---
 
-https://github.com/user-attachments/assets/4d25c7e3-18c1-4c92-9521-848d03ec9443
+## Features
 
-## Features 🚀
-- **Automated enrichment**. Collect 13+ data points per company, including CEO, funding, and products.
-- **CSV upload**. Process multiple company records in a single upload.
-- **Progress tracking**. Monitor enrichment progress as the tool processes data.
-- **User-friendly interface**. Clean, professional dashboard for easy data access.
+- **Email Enrichment** — Find contact emails by scraping company websites and Google search
+- **Website Enrichment** — Find company websites via Google SERP API
+- **Phone Enrichment** — Extract Dutch phone numbers from company websites
+- **Background Processing** — Enrichment runs as a background service with real-time progress tracking
+- **Crash Recovery** — Progress is saved to JSON, so you can resume where you left off
+- **Batch Processing** — Companies processed in configurable batch sizes with rate limiting
 
-For even more powerful research and data enrichment, try [Deep Lookup](https://docs.brightdata.com/datasets/deep-lookup/overview). This tool searches across more than 1,000 public sources and returns ready-to-use structured data using natural language queries.
+## How It Works
 
-## End-to-end workflow 🔄
-1. **User input**. Upload a CSV with company names via the [Streamlit](https://streamlit.io/) interface.
-2. **Data preparation**. [Pandas](https://pandas.pydata.org/) checks for valid company names and removes duplicates.
-3. **Web scraping**. [Requests](https://requests.readthedocs.io/en/latest/) send data to the [Bright Data Web Scraper API](https://brightdata.com/products/web-scraper). Bright Data scrapes web sources for company information.
-4. **AI processing**. [Google Gemini AI](https://ai.google.dev/) standardizes formats and removes inconsistencies.
-5. **Results display**. Enriched data appears in an interactive Streamlit table. Download results or continue enriching more fields.
+1. **Upload** a CSV with a `Name` column (optionally include `City`, `Street`, `ZipCode`)
+2. **Click** an enrichment button (Emails, Websites, or Phones)
+3. **Monitor** progress in the Streamlit dashboard
+4. **Download** results from the date-based output CSV
 
-## Data fields ℹ️
-Each company record may include, based on public data availability:
-- **Leadership**. CEO, Founders, Executives.
-- **Company Info**. LinkedIn URL, Services, Contact Email, Headquarters, and Founded.
-- **Financials**. Funding, Investors, Trustpilot Rating (if available).
-- **Updates**. News, Products, Open Roles (if listed).
+### Email Enrichment Flow
 
-## Prerequisites 🛠️
-- [Python 3.9+](https://python.org/) 🐍
-- [Bright Data API key](https://docs.brightdata.com/api-reference/authentication#how-do-i-generate-a-new-api-key%3F) 🔑
-- [Google Gemini API key](https://aistudio.google.com/apikey) 🔑
-
-## Quick start ⚙️
-
-### Step 1 – clone the repository
-```bash
-git clone https://github.com/triposat/ai-company-enrichment.git
+```
+Google Search ("{company} email")
+    → Parse snippets for emails
+    → If not found: scrape company website (homepage, /contact, /about)
+    → Extract emails from HTML
 ```
 
-### Step 2 – navigate to the folder
-```bash
-cd ai-company-enrichment
-```
+## Quick Start
 
-### Step 3 – create and activate a virtual environment
+### 1. Clone and install
+
 ```bash
-# Create virtual environment
+git clone https://github.com/jrgensls/company-data-enrichment.git
+cd company-data-enrichment
 python -m venv .venv
-
-# Activate virtual environment
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux:
-source .venv/bin/activate
-```
-
-### Step 4 – install dependencies
-```bash
+source .venv/bin/activate  # macOS/Linux
 pip install -r requirements.txt
 ```
 
-### Step 5 – create a `.env` file with
+### 2. Configure environment
+
+Create a `.env` file:
+
 ```bash
 BRIGHT_DATA_API_KEY=your_bright_data_api_key_here
 GEMINI_API_KEY=your_gemini_api_key_here
-DATASET_ID=your_dataset_id_here
 ```
 
-### Step 6 – run the app
+You'll need a [Bright Data API key](https://docs.brightdata.com/api-reference/authentication) and optionally a [Google Gemini API key](https://aistudio.google.com/apikey).
+
+### 3. Run the app
+
 ```bash
-streamlit run app.py
+streamlit run app.py --server.headless true
 ```
 
-### Step 7
-Upload a CSV with a “Company Name” column and select fields to enrich.
+Open http://localhost:8501 in your browser.
 
-## Next steps
-To master AI data enrichment, leverage Bright Data’s powerful tools and support:
-- Power your AI models with advanced [Web Access APIs](https://brightdata.com/ai/web-access) for seamless data access.
-- Explore the [ultimate MCP tool](https://brightdata.com/ai/mcp-server) to connect your AI to the web and enjoy 5,000 MCP requests every month for free.
-- Use [pre-collected datasets](https://brightdata.com/products/datasets) with billions of records for high-quality data.
-- Integrate with AI platforms like n8n and CrewAI to [connect and build AI agents](https://docs.brightdata.com/integrations/ai-integrations).
-- Learn more about AI data solutions in Bright Data’s [blogs page](https://brightdata.com/blog).
+### CLI Usage
 
-For expert guidance, [contact Bright Data’s support team](https://brightdata.com/contact).
+You can also run the enrichment service directly:
+
+```bash
+python enrichment_service.py --emails-only    # Only enrich emails
+python enrichment_service.py --websites-only  # Only enrich websites
+python enrichment_service.py --phones-only    # Only enrich phones
+python enrichment_service.py --dry-run        # Preview what would be processed
+python enrichment_service.py --reset          # Clear progress and start fresh
+```
+
+## Project Structure
+
+```
+├── app.py                  # Streamlit UI and service management
+├── enrichment_service.py   # Background enrichment service
+├── config.py               # Configuration and file paths
+├── enrich_emails.py        # Email enrichment utilities
+├── update_emails.py        # Email update helpers
+├── test_enrichment.py      # Tests
+├── requirements.txt        # Python dependencies
+└── .env                    # API keys (not committed)
+```
+
+## License
+
+MIT
