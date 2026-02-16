@@ -64,7 +64,7 @@ python --version  # Python 3.9+ required
 ```bash
 # 1. Clone the repository
 git clone https://github.com/jrgensls/company-data-enrichment.git
-cd ai-company-enrichment
+cd company-data-enrichment
 
 # 2. Create and activate virtual environment
 python -m venv .venv
